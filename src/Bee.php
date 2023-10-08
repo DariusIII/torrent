@@ -10,15 +10,18 @@ namespace Devristo\Torrent;
 
 class Bee {
 
-    private function encode_string($string){
+    private function encode_string($string): string
+    {
         return sprintf("%d:%s", strlen($string), $string);
     }
 
-    private function encode_int($int){
+    private function encode_int($int): string
+    {
         return 'i'.$int.'e';
     }
 
-    private function encode_list(array $list){
+    private function encode_list(array $list): string
+    {
         $encoded = 'l';
 
         foreach($list as $item)
@@ -29,7 +32,8 @@ class Bee {
         return $encoded;
     }
 
-    private function encode_dict(array $dict){
+    private function encode_dict(array $dict): string
+    {
         $encoded = 'd';
 
         ksort($dict, SORT_STRING);
@@ -42,13 +46,14 @@ class Bee {
         $encoded .= 'e';
         return $encoded;
     }
+	
+	private function is_list(array $arr): bool
+	{
+		return array_is_list($arr);
+	}
 
-    private function is_list(array $arr){
-        for (reset($arr); is_int(key($arr)); next($arr));
-        return is_null(key($arr));
-    }
-
-    private function is_dict(array $arr){
+    private function is_dict(array $arr): bool
+    {
         for (reset($arr); is_int(key($arr)) || is_string(key($arr)); next($arr));
         return is_null(key($arr));
     }
@@ -57,7 +62,8 @@ class Bee {
      * @param $object
      * @return string
      */
-    public function encode($object){
+    public function encode($object): string
+    {
         if(is_int($object) || ctype_digit($object))
             return $this->encode_int($object);
         elseif(is_string($object))
@@ -72,7 +78,8 @@ class Bee {
     }
 
 
-    public function eatInt(&$string, &$pos){
+    public function eatInt(&$string, &$pos): string
+    {
         // Eat the i
         $pos++;
 
@@ -91,7 +98,8 @@ class Bee {
         throw new \InvalidArgumentException("Invalid int format");
     }
 
-    public function eatList(&$string, &$pos){
+    public function eatList(&$string, &$pos): array
+    {
         // Eat the l
         $pos++;
 
@@ -110,7 +118,8 @@ class Bee {
         throw new \InvalidArgumentException("Invalid list format");
     }
 
-    public function eatDict(&$string, &$pos){
+    public function eatDict(&$string, &$pos): array
+    {
         // Eat the d
         $pos++;
 
@@ -132,7 +141,8 @@ class Bee {
         throw new \InvalidArgumentException("Invalid dict format");
     }
 
-    public function eatString(&$string, &$pos){
+    public function eatString(&$string, &$pos): string
+    {
         $i = $pos;
         while($i < strlen($string)){
             if(ctype_digit($string[$i]))
@@ -154,10 +164,11 @@ class Bee {
 
     /**
      * @param $string
-     * @param int $pos
-     * @return mixed
+     * @param  int  $pos
+     * @return string|array
      */
-    public function decode($string, &$pos=0){
+    public function decode($string, int &$pos=0): string|array
+    {
         while($pos < strlen($string)){
             switch($string[$pos]){
                 case 'i':
@@ -174,4 +185,4 @@ class Bee {
             }
         }
     }
-} 
+}

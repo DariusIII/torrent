@@ -11,6 +11,10 @@
     "autoload": {
         "psr-4": {"Devristo\\Torrent\\": "src/"}
     },
+    "require": {
+        "php": "^8.2",
+        "ext-ctype": "*"
+    },
     "minimum-stability": "stable",
     "require-dev": {
         "phpunit/phpunit": ">=3"

@@ -34,7 +34,8 @@ class File {
         }
     }
 
-    public function getParentDirectories(){
+    public function getParentDirectories(): array
+    {
         return array_key_exists('path', $this->data) ? array_slice($this->data['path'], 0, -1) : array();
     }
 
@@ -49,4 +50,15 @@ class File {
     public function __toString(){
         return $this->getName();
     }
-} 
+	
+	/**
+	 * @param  mixed  $data
+	 * @return File
+	 */
+	public function setData(mixed $data): static
+	{
+		$this->data = $data;
+		
+		return $this;
+	}
+}

@@ -33,13 +33,15 @@ class Torrent {
         }
     }
 
-    public function getInfoHash($rawOutput=true){
+    public function getInfoHash($rawOutput=true): string
+    {
         $bee = new Bee();
         return sha1($bee->encode($this->data['info']), $rawOutput);
     }
 
-    protected function isValid(){
-        $hasKeys = function(array $keys, array $data){
+    protected function isValid(): bool
+    {
+        $hasKeys = function(array $keys, ?array $data){
             return count(array_diff($keys, array_keys($data))) === 0;
         };
 
@@ -56,11 +58,13 @@ class Torrent {
         return array_key_exists('announce', $this->data) ? $this->data['announce'] : null;
     }
 
-    public function setAnnounce($url){
+    public function setAnnounce($url): void
+    {
         $this->data['announce'] = $url;
     }
 
-    public function setAnnounceList(array $urls){
+    public function setAnnounceList(array $urls): void
+    {
         foreach($urls as $url)
             if(!is_array($url))
                 throw new \InvalidArgumentException("Announce list should be an array of arrays");
@@ -73,7 +77,8 @@ class Torrent {
         return array_key_exists('announce-list', $this->data) ? $this->data['announce-list'] : array();
     }
 
-    public function getCreationDate(){
+    public function getCreationDate(): ?\DateTime
+    {
         if(!array_key_exists('creation date', $this->data))
             return null;
 
@@ -90,7 +95,8 @@ class Torrent {
         return $this->data['comment'];
     }
 
-    public function setComment($comment){
+    public function setComment($comment): void
+    {
         $this->data['comment'] = $comment;
     }
 
@@ -105,19 +111,23 @@ class Torrent {
         return $this->data['info']['name'];
     }
 
-    public function setName($name){
+    public function setName($name): void
+    {
         $this->data['info']['name'] = $name;
     }
 
-    public function setPrivate($val){
+    public function setPrivate($val): void
+    {
         $this->data['info']['private'] = $val ? 1 : 0;
     }
 
-    public function getNumPieces(){
+    public function getNumPieces(): float
+    {
         return ceil($this->getSize() / $this->getPieceSize());
     }
 
-    public function getPieces(){
+    public function getPieces(): array
+    {
         return str_split($this->data['info']['pieces'], 20);
     }
 
@@ -125,7 +135,8 @@ class Torrent {
         return $this->data['info']['piece length'];
     }
 
-    public function isPrivate(){
+    public function isPrivate(): bool
+    {
         return array_key_exists('private', $this->data['info']);
     }
 
@@ -137,7 +148,8 @@ class Torrent {
         return $length;
     }
 
-    public function getFiles(){
+    public function getFiles(): array
+    {
         return $this->files;
     }
 
@@ -185,7 +197,7 @@ class Torrent {
 
             foreach($array as $k => $item)
                 if(is_array($item))
-                    $to_sort[] = &$array[$k];
+                    $to_sort[] = &$item;
         }
         return $tree;
     }
@@ -194,22 +206,24 @@ class Torrent {
         return $this->data;
     }
 
-    public function serialize(){
+    public function serialize(): string
+    {
         $bee = new Bee();
         return $bee->encode($this->data);
     }
 
-    public static function fromFile($filename){
+    public static function fromFile($filename): Torrent
+    {
         $contents = file_get_contents($filename);
 
         return self::fromString($contents);
     }
 
-    public static function fromString($string){
+    public static function fromString($string): Torrent
+    {
         $bee = new Bee();
         $decoded = $bee->decode($string);
-        $torrent = new Torrent($decoded);
-
-        return $torrent;
+	    
+	    return new Torrent($decoded);
     }
-} 
+}
