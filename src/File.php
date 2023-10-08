@@ -50,15 +50,4 @@ class File {
     public function __toString(){
         return $this->getName();
     }
-	
-	/**
-	 * @param  mixed  $data
-	 * @return File
-	 */
-	public function setData(mixed $data): static
-	{
-		$this->data = $data;
-		
-		return $this;
-	}
 }

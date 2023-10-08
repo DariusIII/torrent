@@ -9,12 +9,15 @@
 namespace Devristo\Torrent;
 
 class Torrent {
-    private $data;
+	/**
+	 * @var
+	 */
+	private $data;
 
     /**
      * @var File[]
      */
-    private $files;
+    private array $files;
 
     protected function __construct($data){
         $this->data = $data;
