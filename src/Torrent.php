@@ -41,15 +41,20 @@ class Torrent {
 
     protected function isValid(): bool
     {
-        $hasKeys = function(array $keys, ?array $data){
-            return count(array_diff($keys, array_keys($data))) === 0;
+		$hasKeys = function($keys, $data){
+			if (is_array($data) && is_array($keys)) {
+				return count(array_diff($keys, array_keys($data))) === 0;
+			}
+			return false;
         };
 
-        if(!$hasKeys(array('info'), $this->data))
-            return false;
+        if(!$hasKeys(array('info'), $this->data)) {
+	        return false;
+        }
 
-        if(!$hasKeys(array('piece length', 'pieces'), $this->data['info']))
-            return false;
+        if(!$hasKeys(array('piece length', 'pieces'), $this->data['info'])) {
+	        return false;
+        }
 
         return true;
     }
