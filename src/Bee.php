@@ -161,15 +161,15 @@ class Bee {
         }
         throw new \InvalidArgumentException("Invalid string format");
     }
-
-    /**
-     * @param $string
-     * @param  int  $pos
-     * @return string|array
-     */
-    public function decode($string, int &$pos=0): string|array
+	
+	/**
+	 * @param $string
+	 * @param  int  $pos
+	 * @return array|string|void
+	 */
+	public function decode($string, int &$pos=0)
     {
-        while($pos < strlen($string)){
+		while($pos < strlen($string)){
             switch($string[$pos]){
                 case 'i':
                     return $this->eatInt($string, $pos);
